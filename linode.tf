@@ -8,10 +8,10 @@ locals {
 
 resource "linode_instance" "rancher_docker" {
   count = var.node_count
-  image = "linode/ubuntu19.04"
+  image = "linode/ubuntu18.04"
   label = "${var.label}_instance_${local.create_time}_${count.index}"
   region = "us-central"
-  type = "g6-standard-1" # https://cloud.linode.com/api/v4/linode/types
+  type = "g6-standard-2" # https://cloud.linode.com/api/v4/linode/types
   authorized_keys = [var.ssh_key]
   root_pass = var.root_pass
 
@@ -33,7 +33,7 @@ resource "linode_instance" "rancher_docker" {
       "systemctl start docker",
       "systemctl enable docker",
       "docker --version",
-      "sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher",
+      "sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher --add-local=true",
     ]
   }
 }
